@@ -14,10 +14,35 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:text="Houseplant Monitoring"
-        android:textSize="30sp"
+        android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/plantButtonOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant 1"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="304dp" />
+
+    <Button
+        android:id="@+id/plantButtonTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plant 2"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="370dp" />
+
+    <TextView
+        android:id="@+id/selectPlantView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select your plant"
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="94dp"
+        tools:layout_editor_absoluteY="216dp" />
 
 </android.support.constraint.ConstraintLayout>
