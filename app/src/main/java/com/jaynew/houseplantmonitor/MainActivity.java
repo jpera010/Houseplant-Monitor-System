@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
+    //FirebaseHelper mFirebase = new FirebaseHelper();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

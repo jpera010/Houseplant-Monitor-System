@@ -1,6 +1,7 @@
 package com.jaynew.houseplantmonitor;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +32,7 @@ public class FirebaseHelper {
     public void readPlantData(final DataStatus dataStatus) {
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {      //occurs each time there is a change to database
                 plantList.clear();
                 List<String> keys = new ArrayList<>();
                 for (DataSnapshot keyNode : dataSnapshot.getChildren()) {
@@ -44,9 +45,13 @@ public class FirebaseHelper {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.w("loadPost:onCancelled", databaseError.toException());  //On fail
             }
         });
+    }
+
+    public List<Plant> getPlantList() {
+        return plantList;
     }
 
 }
