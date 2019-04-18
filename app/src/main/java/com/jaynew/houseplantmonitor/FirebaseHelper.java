@@ -9,28 +9,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirebaseHelper {
+public class FirebaseHelper implements Serializable {
     private FirebaseDatabase mDatabase;
-    private DatabaseReference mDatabaseRef;
+    private DatabaseReference mreffplantData;
+
     private List<Plant> plantList = new ArrayList<>();
 
-    public interface DataStatus {
-        void DataIsLoaded(List<Plant> plantList, List<String> keys);
-        void DataIsInserted();
-        void DataIsUpdated();
-        void DataIsDeleted();
-    }
 
     public FirebaseHelper() {
         mDatabase = FirebaseDatabase.getInstance();
-        mDatabaseRef = mDatabase.getReference("plantData");
+        mreffplantData = mDatabase.getReference("plantData");
     }
 
-    public void readPlantData(final DataStatus dataStatus) {
-        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+    public void readPlantData() {
+        mreffplantData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {      //occurs each time there is a change to database
                 plantList.clear();
@@ -40,7 +36,6 @@ public class FirebaseHelper {
                     Plant plant = keyNode.getValue(Plant.class);
                     plantList.add(plant);
                 }
-                dataStatus.DataIsLoaded(plantList, keys);
             }
 
             @Override

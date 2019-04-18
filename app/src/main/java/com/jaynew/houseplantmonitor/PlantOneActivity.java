@@ -16,6 +16,7 @@ public class PlantOneActivity extends AppCompatActivity {
     private TextView plantTextA;
     private TextView temperatureA;
     private TextView moistureViewA;
+
     DatabaseReference reff;
 
     @Override
