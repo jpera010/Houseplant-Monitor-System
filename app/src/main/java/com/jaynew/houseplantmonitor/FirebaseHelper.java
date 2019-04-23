@@ -14,15 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FirebaseHelper implements Serializable {
+
     private FirebaseDatabase mDatabase;
     private DatabaseReference mreffplantData;
-
-    private List<Plant> plantList = new ArrayList<>();
+    private List<Plant> plantList;
 
 
     public FirebaseHelper() {
         mDatabase = FirebaseDatabase.getInstance();
         mreffplantData = mDatabase.getReference("plantData");
+        plantList = new ArrayList<>();
     }
 
     public void readPlantData() {
