@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
             registry.append(StorageReference.class, InputStream.class,
                     new FirebaseImageLoader.Factory());
         }
-    }
-*/
+    }*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
