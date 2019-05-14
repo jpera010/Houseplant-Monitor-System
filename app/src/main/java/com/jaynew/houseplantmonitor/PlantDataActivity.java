@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
@@ -89,11 +90,13 @@ public class PlantDataActivity extends AppCompatActivity {
                         if (b == true) {
                             lightSwitch.setChecked(true);
                             reff.child("light").setValue(1);
+                            Toast.makeText(getBaseContext(), "Light on", Toast.LENGTH_SHORT).show();
                             Log.wtf("lightTag", "setting light to 1");
                         }
                         else if (b == false){
                             lightSwitch.setChecked(false);
                             reff.child("light").setValue(0);
+                            Toast.makeText(getBaseContext(), "Light off", Toast.LENGTH_SHORT).show();
                             Log.wtf("lightTag", "setting light to 0");
                         }
                     }
