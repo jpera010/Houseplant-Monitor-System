@@ -5,8 +5,6 @@ public class Plant {                    //Plant class to keep track of data of p
     private int temperature;
     private int moisture_level;
 
-    public Plant() {
-    }
 
     public Plant(String name, int temperature, int moisture_level) {
         this.name = name;
