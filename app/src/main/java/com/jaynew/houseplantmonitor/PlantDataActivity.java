@@ -34,6 +34,8 @@ import java.io.InputStream;
 
 public class PlantDataActivity extends AppCompatActivity {
 
+    String userChoice;
+
     private TextView plantTextA;
     private TextView temperatureA;
     private TextView moistureViewA;
@@ -58,9 +60,9 @@ public class PlantDataActivity extends AppCompatActivity {
         lightSwitch = (Switch)findViewById(R.id.lightSwitch);
 
 
-        String userChoice = getIntent().getStringExtra("userChoice");       //get user's choice from main activity
+        userChoice = getIntent().getStringExtra("userChoice");       //get user's choice from main activity
 
-        reff = FirebaseDatabase.getInstance().getReference().child("plantData").child(userChoice);      //grab firebase information/data
+        reff = FirebaseDatabase.getInstance().getReference();      //grab firebase information/data
         plantImageReff = FirebaseStorage.getInstance().getReference().child("succ.jpg");
         //base64image = FirebaseDatabase.getInstance().getReference().child("images").child("image");
 
@@ -73,11 +75,11 @@ public class PlantDataActivity extends AppCompatActivity {
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.child("name").getValue().toString();
-                String temperature = dataSnapshot.child("temperature").getValue().toString();
-                String moisture_level = dataSnapshot.child("moisture_level").getValue().toString();
+                String name = dataSnapshot.child("plantData").child(userChoice).child("name").getValue().toString();
+                String temperature = dataSnapshot.child("plantData").child(userChoice).child("temperature").getValue().toString();
+                String moisture_level = dataSnapshot.child("plantData").child(userChoice).child("moisture_level").getValue().toString();
 
-                final int light = Integer.parseInt(dataSnapshot.child("light").getValue().toString());
+                final int light = Integer.parseInt(dataSnapshot.child("tools").child("light").getValue().toString());
                 Log.wtf("lightTag", "light loaded");
                 plantTextA.setText(name);
                 temperatureA.setText(temperature);
@@ -89,13 +91,13 @@ public class PlantDataActivity extends AppCompatActivity {
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         if (b == true) {
                             lightSwitch.setChecked(true);
-                            reff.child("light").setValue(1);
+                            reff.child("tools").child("light").setValue(1);
                             Toast.makeText(getBaseContext(), "Light on", Toast.LENGTH_SHORT).show();
                             Log.wtf("lightTag", "setting light to 1");
                         }
                         else if (b == false){
                             lightSwitch.setChecked(false);
-                            reff.child("light").setValue(0);
+                            reff.child("tools").child("light").setValue(0);
                             Toast.makeText(getBaseContext(), "Light off", Toast.LENGTH_SHORT).show();
                             Log.wtf("lightTag", "setting light to 0");
                         }
