@@ -1,6 +1,8 @@
 package com.jaynew.houseplantmonitor;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -41,6 +43,8 @@ public class PlantDataActivity extends AppCompatActivity {
     private TextView moistureViewA;
     private ImageView plantImageView;
 
+    private Button settingsButton;
+    private Button waterButton;
     private Switch lightSwitch;
 
     DatabaseReference reff;
@@ -57,8 +61,9 @@ public class PlantDataActivity extends AppCompatActivity {
         moistureViewA = (TextView)findViewById(R.id.moistureViewA);
         plantImageView = (ImageView)findViewById(R.id.plantImageView);
 
+        waterButton = (Button)findViewById(R.id.waterButton);
         lightSwitch = (Switch)findViewById(R.id.lightSwitch);
-
+        settingsButton = (Button)findViewById(R.id.settingsButton);
 
         userChoice = getIntent().getStringExtra("userChoice");       //get user's choice from main activity
 
@@ -71,6 +76,14 @@ public class PlantDataActivity extends AppCompatActivity {
         GlideApp.with(this /* context */)
                 .load(plantImageReff)
                 .into(plantImageView);
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent startIntent = new Intent(getApplicationContext(), settingsActivity.class);
+                startActivity(startIntent);
+            }
+        });
 
         reff.addValueEventListener(new ValueEventListener() {
             @Override
@@ -101,6 +114,14 @@ public class PlantDataActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "Light off", Toast.LENGTH_SHORT).show();
                             Log.wtf("lightTag", "setting light to 0");
                         }
+                    }
+                });
+
+                waterButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        reff.child("tools").child("water_pump").setValue(1);
+                        Toast.makeText(getBaseContext(), "Watering plant...", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
