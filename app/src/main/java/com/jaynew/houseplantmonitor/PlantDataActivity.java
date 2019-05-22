@@ -47,7 +47,8 @@ public class PlantDataActivity extends AppCompatActivity {
     private Button waterButton;
     private Switch lightSwitch;
 
-    DatabaseReference reff;
+    DatabaseReference toolsReff;
+    DatabaseReference plantDataReff;
     DatabaseReference base64image;
     StorageReference plantImageReff;
 
@@ -67,7 +68,8 @@ public class PlantDataActivity extends AppCompatActivity {
 
         userChoice = getIntent().getStringExtra("userChoice");       //get user's choice from main activity
 
-        reff = FirebaseDatabase.getInstance().getReference();      //grab firebase information/data
+        plantDataReff = FirebaseDatabase.getInstance().getReference().child("plantData");      //grab firebase information/data
+        toolsReff = FirebaseDatabase.getInstance().getReference().child("tools");
         plantImageReff = FirebaseStorage.getInstance().getReference().child("succ.jpg");
         //base64image = FirebaseDatabase.getInstance().getReference().child("images").child("image");
 
@@ -85,32 +87,24 @@ public class PlantDataActivity extends AppCompatActivity {
             }
         });
 
-        reff.addValueEventListener(new ValueEventListener() {
+        toolsReff.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.child("plantData").child(userChoice).child("name").getValue().toString();
-                String temperature = dataSnapshot.child("plantData").child(userChoice).child("temperature").getValue().toString();
-                String moisture_level = dataSnapshot.child("plantData").child(userChoice).child("moisture_level").getValue().toString();
-
-                final int light = Integer.parseInt(dataSnapshot.child("tools").child("light").getValue().toString());
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final int light = Integer.parseInt(dataSnapshot.child("light").getValue().toString());
                 Log.wtf("lightTag", "light loaded");
-                plantTextA.setText(name);
-                temperatureA.setText(temperature);
-                moistureViewA.setText(moisture_level);
-
 
                 lightSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         if (b == true) {
                             lightSwitch.setChecked(true);
-                            reff.child("tools").child("light").setValue(1);
+                            toolsReff.child("light").setValue(1);
                             Toast.makeText(getBaseContext(), "Light on", Toast.LENGTH_SHORT).show();
                             Log.wtf("lightTag", "setting light to 1");
                         }
                         else if (b == false){
                             lightSwitch.setChecked(false);
-                            reff.child("tools").child("light").setValue(0);
+                            toolsReff.child("light").setValue(0);
                             Toast.makeText(getBaseContext(), "Light off", Toast.LENGTH_SHORT).show();
                             Log.wtf("lightTag", "setting light to 0");
                         }
@@ -120,10 +114,28 @@ public class PlantDataActivity extends AppCompatActivity {
                 waterButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        reff.child("tools").child("water_pump").setValue(1);
+                        toolsReff.child("water_pump").setValue(1);
                         Toast.makeText(getBaseContext(), "Watering plant...", Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        plantDataReff.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                String name = dataSnapshot.child(userChoice).child("name").getValue().toString();
+                String temperature = dataSnapshot.child(userChoice).child("temperature").getValue().toString();
+                String moisture_level = dataSnapshot.child(userChoice).child("moisture_level").getValue().toString();
+
+                plantTextA.setText(name);
+                temperatureA.setText(temperature);
+                moistureViewA.setText(moisture_level);
             }
 
             @Override
