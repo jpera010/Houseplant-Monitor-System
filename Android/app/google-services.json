@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "793901593997",
+    "firebase_url": "https://houseplant-monitor.firebaseio.com",
+    "project_id": "houseplant-monitor",
+    "storage_bucket": "houseplant-monitor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793901593997:android:79c7a571e1758b7c",
+        "android_client_info": {
+          "package_name": "com.jaynew.houseplantmonitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "793901593997-l8lsm6f3j5bcln8j8chlb9fjr1n2j57k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jaynew.houseplantmonitor",
+            "certificate_hash": "3bd32c93e7fd6c712cc245a4db3ecc3d4c4f917f"
+          }
+        },
+        {
+          "client_id": "793901593997-ve4gp1fa8g73qqrbsdif2d76m9tv72du.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA11DqrD2p6cCSvKFt6ZA9nNya5jyv2xyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "793901593997-ve4gp1fa8g73qqrbsdif2d76m9tv72du.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
