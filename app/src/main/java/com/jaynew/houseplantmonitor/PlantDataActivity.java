@@ -130,7 +130,7 @@ public class PlantDataActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.child(userChoice).child("name").getValue().toString();
-                String temperature = dataSnapshot.child(userChoice).child("temperature").getValue().toString();
+                String temperature = dataSnapshot.child("temperature").getValue().toString();
                 String moisture_level = dataSnapshot.child(userChoice).child("moisture_level").getValue().toString();
 
                 plantTextA.setText(name);
