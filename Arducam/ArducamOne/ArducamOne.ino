@@ -23,7 +23,7 @@ NTPClient timeClient(ntpUDP, "3.north-america.pool.ntp.org", -25200);
 void water_scheduler() {
   timeClient.update(); 
   curr_day = timeClient.getDay();               ///////////// Sunday = 0, Monday = 1, etc...
-  curr_hour = timeClient.getHours();            ////////////Army hours: 14:00 = 2:00 pm 
+  curr_hour = timeClient.getHours();            //////////// Army hours: 14:00 = 2:00 pm 
   curr_min = timeClient.getMinutes();
   Serial.println(timeClient.getDay()); 
   Serial.println(timeClient.getFormattedTime()); 
@@ -52,9 +52,9 @@ void water_scheduler() {
   else if (sched_setting = 2) {               /////Sched_setting = 2 => weekly
     if (curr_day == sched_day && curr_hour == sched_hour && curr_min == sched_min && !watered) {
       Serial.println("Scheduled watering beginning...");
-      digitalWrite(14, LOW); 
+      digitalWrite(0, LOW); 
       delay(2000); 
-      digitalWrite(14, HIGH); 
+      digitalWrite(0, HIGH); 
       watered = true;  
       Serial.println("Scheduled watering finished..."); 
     }
@@ -64,6 +64,7 @@ void water_scheduler() {
   }
 }
 
+    ////// Controls the lighting of the system...checks to see if there is a change before applying change
 void lighting() {
   int light_checker = Firebase.getInt("tools/light"); 
   if (Firebase.failed()) {
@@ -71,7 +72,6 @@ void lighting() {
     Serial.println(Firebase.error()); 
     return; 
   }
-    ////// Controls the lighting of the system...checks to see if there is a change before applying change
   if (light != light_checker) {                
     light = light_checker; 
     if (light == 1) {
@@ -85,8 +85,8 @@ void lighting() {
   }
 }
 
+////// Controls the water pump of the system...change values according to tests!!!!! CRITICAL !!!!! BE CAREFUL NOT TO LEAVE PUMP ON TOO LONG
 void manual_pump() {
-    ////// Controls the water pump of the system...change values according to tests!!!!! CRITICAL !!!!! BE CAREFUL NOT TO LEAVE PUMP ON TOO LONG
   int water_checker = Firebase.getInt("tools/water_pump"); 
   if (Firebase.failed()) {
     Serial.println("Failed to retrieve light value"); 
@@ -95,13 +95,13 @@ void manual_pump() {
   }
   if (water_checker == 1) {                    
     
-    digitalWrite(14, LOW); 
+    digitalWrite(0, LOW); 
     Serial.println("Setting PIN14 to LOW"); 
     Serial.println("Watering plant..."); 
     
     delay(1500);        ///// Modify this in milliseconds for how long pump lasts
     
-    digitalWrite(14, HIGH);
+    digitalWrite(0, HIGH);
     Serial.println("Setting PIN14 to HIGH");
     Serial.println("Done watering...");
 
@@ -116,9 +116,10 @@ void setup() {
   watered = false; 
   Serial.println("Setting up..."); 
   pinMode(16, OUTPUT); 
+  pinMode(0, OUTPUT); 
   Serial.begin(9600);
+   
   
-
   // connect to wifi.
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("connecting");
