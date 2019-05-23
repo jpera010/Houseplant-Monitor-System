@@ -1,22 +1,3 @@
-//
-// Copyright 2015 Google Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-
-// FirebaseDemo_ESP8266 is a sample that demo the different functions
-// of the FirebaseArduino API.
-
 #include <NTPClient.h> 
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
@@ -83,6 +64,52 @@ void water_scheduler() {
   }
 }
 
+void lighting() {
+  int light_checker = Firebase.getInt("tools/light"); 
+  if (Firebase.failed()) {
+    Serial.println("Failed to retrieve light value"); 
+    Serial.println(Firebase.error()); 
+    return; 
+  }
+    ////// Controls the lighting of the system...checks to see if there is a change before applying change
+  if (light != light_checker) {                
+    light = light_checker; 
+    if (light == 1) {
+      digitalWrite(16, HIGH); 
+      Serial.println("Setting PIN16 to HIGH"); 
+    }
+    else {
+      digitalWrite(16, LOW); 
+      Serial.println("Setting PIN16 to LOW");
+    }
+  }
+}
+
+void manual_pump() {
+    ////// Controls the water pump of the system...change values according to tests!!!!! CRITICAL !!!!! BE CAREFUL NOT TO LEAVE PUMP ON TOO LONG
+  int water_checker = Firebase.getInt("tools/water_pump"); 
+  if (Firebase.failed()) {
+    Serial.println("Failed to retrieve light value"); 
+    Serial.println(Firebase.error()); 
+    return; 
+  }
+  if (water_checker == 1) {                    
+    
+    digitalWrite(14, LOW); 
+    Serial.println("Setting PIN14 to LOW"); 
+    Serial.println("Watering plant..."); 
+    
+    delay(1500);        ///// Modify this in milliseconds for how long pump lasts
+    
+    digitalWrite(14, HIGH);
+    Serial.println("Setting PIN14 to HIGH");
+    Serial.println("Done watering...");
+
+    Firebase.setInt("tools/water_pump", 0);       ////// Setting database value back to 0
+    Serial.println("Database value set back to 0"); 
+  }
+}
+
 void setup() {
   light = 0; 
   water = 0; 
@@ -108,45 +135,12 @@ void setup() {
 }
 
 void loop() {
-  water_scheduler(); 
-  int light_checker = Firebase.getInt("tools/light"); 
-  int water_checker = Firebase.getInt("tools/water_pump"); 
-  if (Firebase.failed()) {
-    Serial.println("Failed to retrieve light value"); 
-    Serial.println(Firebase.error()); 
-    return; 
-  }
   
-  ////// Controls the lighting of the system...checks to see if there is a change before applying change
-  if (light != light_checker) {                
-    light = light_checker; 
-    if (light == 1) {
-      digitalWrite(16, HIGH); 
-      Serial.println("Setting PIN16 to HIGH"); 
-    }
-    else {
-      digitalWrite(16, LOW); 
-      Serial.println("Setting PIN16 to LOW");
-    }
-  }
+  water_scheduler(); 
 
-  ////// Controls the water pump of the system...change values according to tests!!!!! CRITICAL !!!!! BE CAREFUL NOT TO LEAVE PUMP ON TOO LONG
-  if (water_checker == 1) {                    
-    
-    digitalWrite(14, LOW); 
-    Serial.println("Setting PIN14 to LOW"); 
-    Serial.println("Watering plant..."); 
-    
-    delay(1500);        ///// Modify this in milliseconds for how long pump lasts
-    
-    digitalWrite(14, HIGH);
-    Serial.println("Setting PIN14 to HIGH");
-    Serial.println("Done watering...");
+  lighting(); 
 
-    Firebase.setInt("tools/water_pump", 0);       ////// Setting database value back to 0
-    Serial.println("Database value set back to 0"); 
-  }
-
+  manual_pump(); 
   
   delay(3000); 
 }
