@@ -120,7 +120,9 @@ void runKeypad(char a) {
       unlocked = 0;
       Firebase.setInt("tools/lock", 1);
       digitalWrite(signalPin, LOW);
-      clearData();
+      while(data_count !=0){
+        Data[data_count--] = 0; 
+      }
     }
   }
   else {
