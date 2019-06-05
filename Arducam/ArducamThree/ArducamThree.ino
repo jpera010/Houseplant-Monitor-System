@@ -77,6 +77,7 @@ void setup() {
   initializeVariables();
   initializeTempSensor();
   pinMode(signalPin, OUTPUT);
+  signalDetected = Firebase.getBool("signals/updateSensors");
   //unlocked = !(Firebase.getInt("security/lockSet"));
   //if (!unlocked) {
   //  digitalWrite(signalPin, LOW);
