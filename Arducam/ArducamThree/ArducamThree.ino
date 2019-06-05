@@ -56,8 +56,8 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 
 #define FIREBASE_HOST "houseplant-monitor.firebaseio.com"
 #define FIREBASE_AUTH "1N7ntYmFD3HCJngEVKeKtAbVCJEBEK7TOVpoNLnb"
-#define WIFI_SSID "FirePuff12"
-#define WIFI_PASSWORD "VolcaMang0rona715"
+#define WIFI_SSID "Akhil's iPhone"
+#define WIFI_PASSWORD "FirePuff12"
 
 
 void setup() {
@@ -151,7 +151,7 @@ void runKeypad(char a) {
   if (unlocked) {
     if (customKey == '*') {
       unlocked = 0;
-      Firebase.setInt("security/lockSet", 1);
+      Firebase.setBool("security/lockSet", 1);
       digitalWrite(signalPin, LOW);
       while (data_count != 0) {
         Data[data_count--] = 0;
@@ -163,7 +163,7 @@ void runKeypad(char a) {
     if (data_count == Password_Length - 1) {
       if (!strcmp(Data, MasterPasscode.c_str())) { // strcmp returns 0 if equal
         unlocked = 1;
-        Firebase.setInt("security/lockSet", 0);
+        Firebase.setBool("security/lockSet", 0);
         digitalWrite(signalPin, HIGH); //on for 5 seconds
       }
       else { //incorrect password, blink on/off
@@ -186,14 +186,19 @@ void runKeypad(char a) {
   }
 }
 
-void updateTemp(int temp, int tempAlert) {
-  Firebase.setInt("alerts/unsafeTemp", tempAlert);
+void updateTemp(int temp, bool tempAlert) {
+  Firebase.setBool("signals/updateSensors", 0);
+  if(tempAlert == true)
+  {
+    Firebase.setBool("alerts/unsafeTemp", tempAlert);
+  }
+  
   if (Firebase.failed()) {
     Serial.print("pushing unsafe temp alert failed:");
     Serial.println(Firebase.error());
     return;
   }
-  Firebase.setInt("signals/updateSensors", 0);
+  //Firebase.setBool("signals/updateSensors", 0);
   if (Firebase.failed()) {
     Serial.print("pushing update sensor signal failed:");
     Serial.println(Firebase.error());
@@ -225,7 +230,7 @@ void initializeVariables() {
   sensor_reading = 0;
   temperature = 0;
   temp_total = 0;
-  unsafeTemp = 0;
+  //unsafeTemp = false;
 }
 
 void run_tempSM() {
@@ -235,7 +240,7 @@ void run_tempSM() {
       Tarray_index = 0;
       temp_total = 0;
       temperature = 0;
-      unsafeTemp = 0;
+      //unsafeTemp = false;
       for (int i = 0; i < array_length; i++) { // initialize array to zeros
         Temp[i] = 0;
       }
