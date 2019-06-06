@@ -56,8 +56,8 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 
 #define FIREBASE_HOST "houseplant-monitor.firebaseio.com"
 #define FIREBASE_AUTH "1N7ntYmFD3HCJngEVKeKtAbVCJEBEK7TOVpoNLnb"
-#define WIFI_SSID "Akhil's iPhone"
-#define WIFI_PASSWORD "FirePuff12"
+#define WIFI_SSID "JOSESLAPTOP"
+#define WIFI_PASSWORD "hello1234"
 
 
 void setup() {
