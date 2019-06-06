@@ -98,7 +98,8 @@ void loop() {
     {
       Serial.println("lockSet");
       lockEventValue = event.getBool("data");
-      if (lockEventValue == false) {
+      unlocked = !lockEventValue;
+      if (unlocked == false) {
         digitalWrite(signalPin, LOW);
         //Serial.println("System is open");
       }
@@ -107,11 +108,11 @@ void loop() {
         //Serial.println("System is closed");
       }
     }
-    if (eventPath == "/security/keypadPasscode")
-    {
-      MasterPasscode = event.getString("data");
+    //if (eventPath == "/security/keypadPasscode")
+    //{
+    //  MasterPasscode = event.getString("data");
       //Serial.println(MasterPasscode);
-    }
+    //}
     if (eventPath == "/signals/updateSensors")
     {
       signalDetected = event.getBool("data");
@@ -141,14 +142,6 @@ void runSensor(bool b) {
 }
 
 void runKeypad(char a) {
-  if (a) {
-    digitalWrite(signalPin, HIGH);
-    Serial.println(a);
-    Data[data_count] = a;
-    data_count++;
-    delay(50);
-    digitalWrite(signalPin, LOW);
-  }
   if (unlocked) {
     if (customKey == '*') {
       unlocked = 0;
@@ -159,9 +152,18 @@ void runKeypad(char a) {
       }
     }
   }
+  else if (a) {
+    digitalWrite(signalPin, HIGH);
+    Serial.println(a);
+    Data[data_count] = a;
+    data_count++;
+    delay(50);
+    digitalWrite(signalPin, LOW);
+  }
   else {
     //if input count = 4
     if (data_count == Password_Length - 1) {
+      MasterPasscode = Firebase.getString("security/keypadPasscode");
       if (!strcmp(Data, MasterPasscode.c_str())) { // strcmp returns 0 if equal
         unlocked = 1;
         Firebase.setBool("security/lockSet", 0);
