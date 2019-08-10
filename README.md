@@ -9,3 +9,5 @@ The Arducam folder has the source code for controlling the different components 
   ArducamOne: controls motion sensor and fingerprint scanner (fingerprint scanner was not integrated into this version)
   ArducamTwo: controls LED light strip, lock style solenoid, water pump, and soil moisture sensor 
   ArducamThree: controls temperature sensor and keypad 
+
+Brief overview: https://youtu.be/kX4eclsc-H8
